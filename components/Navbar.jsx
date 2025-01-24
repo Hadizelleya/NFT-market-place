@@ -53,7 +53,7 @@ const ButtonGroup = ({ setActive, router }) => {
     <Button
       handleClick={() => {
         setActive("");
-        router.push("/create-nfts");
+        router.push("/create-nft");
       }}
       btnName={"Create"}
       classStyles={"mx-2  rounded-xl"}
