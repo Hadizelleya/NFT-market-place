@@ -5,18 +5,22 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Button, Input } from "../components/export";
 import images from "../assets";
+import { NFTContext } from "../context/NFTContext";
 
 export default function CreateNft() {
   const { theme } = useTheme();
   const [fileUrl, setFileUrl] = useState(null);
+  const { uploadFileToPinata } = useContext(NFTContext);
   const [formInput, setFormInput] = useState({
     name: "",
     price: "",
     description: "",
   });
 
-  const onDrop = useCallback(() => {
-    //upload image to ipfs
+  const onDrop = useCallback(async (acceptedFile) => {
+    const res = await uploadFileToPinata(acceptedFile[0]);
+    const url = `https://gateway.pinata.cloud/ipfs/${res.IpfsHash}`;
+    setFileUrl(url);
   }, []);
 
   const {
@@ -25,7 +29,7 @@ export default function CreateNft() {
     isDragActive,
     isDragAccept,
     isDragReject,
-  } = useDropzone({ onDrop, accept: "image/", maxSize: 5000000 });
+  } = useDropzone({ onDrop, accept: "image/*", maxSize: 5000000 });
 
   const fileStyle = useMemo(
     () =>
@@ -35,8 +39,6 @@ export default function CreateNft() {
       ${isDragReject && "border-fil-reject"}`,
     [isDragActive, isDragAccept, isDragReject]
   );
-
-  console.log(formInput);
 
   return (
     <div className="flex justify-center sm:px-4 p-12 ">

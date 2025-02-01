@@ -7,6 +7,7 @@ import images from "../assets";
 import { FaSun } from "react-icons/fa";
 import { Button } from "../components/export";
 import { FaMoon } from "react-icons/fa";
+import { NFTContext } from "../context/NFTContext";
 
 const MenuItems = ({ isMobile, active, setActive }) => {
   const generateLink = (i) => {
@@ -21,6 +22,7 @@ const MenuItems = ({ isMobile, active, setActive }) => {
         return "/";
     }
   };
+
   return (
     <ul
       className={`list-none flexCenter flex-row ${
@@ -47,9 +49,9 @@ const MenuItems = ({ isMobile, active, setActive }) => {
 };
 
 const ButtonGroup = ({ setActive, router }) => {
-  const hasConnected = true;
+  const { connectWallet, currentAccount } = useContext(NFTContext);
 
-  return hasConnected ? (
+  return currentAccount ? (
     <Button
       handleClick={() => {
         setActive("");
@@ -60,7 +62,7 @@ const ButtonGroup = ({ setActive, router }) => {
     ></Button>
   ) : (
     <Button
-      handleClick={() => {}}
+      handleClick={connectWallet}
       btnName={"Connect"}
       classStyles={"mx-2 rounded-xl"}
     ></Button>
